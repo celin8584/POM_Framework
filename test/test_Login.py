@@ -1,25 +1,23 @@
 import time
-
+import os
+import pytest
 from selenium import webdriver
+from Pages.loginpage import LoginPage
+from Pages.homepage import HomePage
+from utils.constants import *
 
-def test_launch_browser():
-    global driver
-    driver = webdriver.Chrome(executable_path="C:/Users/celin/PycharmProjects/Automation_POM_Framework/drivers/chromedriver.exe")
+@pytest.mark.usefixtures("test_launch_browser")
+class TestLogin:
+    def test_login(self):
+        driver = self.driver
+        lp = LoginPage(driver)
+        lp.enter_user_name()
+        lp.enter_password()
+        lp.click_on_login_btn()
 
-    driver.get("https://demo.actitime.com/login.do")
-    driver.maximize_window()
-    driver.implicitly_wait(30)
-
-def test_login():
-    driver.find_element_by_id("username").send_keys("admin")
-    driver.find_element_by_name("pwd").send_keys("manager")
-    driver.find_element_by_xpath("//div[text()='Login ']").click()
-
-
-def test_logout():
-    time.sleep(5)
-    driver.find_element_by_xpath("//*[text()='Logout']").click()
-
-# launch_browser()
-# login()
-# logout()
+    def test_logout(self):
+        driver = self.driver
+        time.sleep(30)
+        # driver.find_element_by_xpath("//*[text()='Logout']").click()
+        hp = HomePage(driver)
+        hp.click_on_logout()
